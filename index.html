@@ -15,7 +15,7 @@
          font-family: 'Open Sans', sans-serif;
          background: #f9f9f9;
          width: 1728px;
-		 height: 931px;
+         height: 931px;
          }
          h1 {
          font-size: 2.5em;
@@ -242,23 +242,23 @@
               const fileInput = document.getElementById("file-input");
               const file = fileInput.files[0];
               const reader = new FileReader();
-
+            
               reader.onload = function(e) {
                 const textArea = document.getElementById("typing-text-left");
                 textArea.value = e.target.result;
               }
-
+            
               reader.readAsText(file);
             }
-
+            
             function uploadScreenshot() {
               const canvas = document.getElementById("screenshot-canvas");
               const ctx = canvas.getContext("2d");
-
+            
               const input = document.createElement("input");
               input.type = "file";
               input.accept = "image/png";
-
+            
               input.addEventListener("change", function() {
                 const file = this.files[0];
                 const img = new Image();
@@ -267,7 +267,7 @@
                 };
                 img.src = URL.createObjectURL(file);
               });
-
+            
               input.click();
             }
          </script>
@@ -279,17 +279,17 @@
             var typingTextRight1 = document.getElementById("typing-textright");
             var submitButtonRight1 = document.getElementsByTagName("button")[1];
             var wordCounter1 = document.getElementById("wordcounter");
-
+            
             function startTimer1(timer) {
               var interval;
-
+            
               function updateTimer() {
                 var elapsedTime = new Date() - startTimeRight1;
                 var remainingTime = Math.max(0, 20 * 60 * 1000 - elapsedTime);
                 var seconds = Math.floor((remainingTime / 1000) % 60);
                 var minutes = Math.floor((remainingTime / 1000 / 60) % 60);
                 timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
-
+            
                 if (remainingTime <= 0) { // Check if time is up
                   clearInterval(interval);
                   timer.innerHTML = "Time's up!";
@@ -297,30 +297,30 @@
                   submitButtonRight1.disabled = true;
                 }
               }
-
+            
               function start() {
                 startTimeRight1 = new Date();
                 interval = setInterval(updateTimer, 1000);
               }
-
+            
               return start;
             }
-
+            
             var startTimerRight1 = startTimer1(timerRight1);
-
-
+            
+            
             function updateWordCount1() { // Define a new function to update word count
               var wordCount = typingTextRight1.value.trim().split(/\s+/).length;
               wordCounter1.innerHTML = wordCount + " words";
             }
-
+            
             typingTextRight1.addEventListener("keydown", function(event) {
               if (!startTimeRight1) {
                 startTimerRight1();
               }
               updateWordCount1(); // Update word count on every keydown event
             });
-
+            
             setTimeout(function() {
               typingTextRight1.disabled = true;
               submitButtonRight1.disabled = true;
@@ -363,17 +363,17 @@
                var typingTextRight = document.getElementById("typing-text-right");
                var submitButtonRight = document.getElementsByTagName("button")[1];
                var wordCounter = document.getElementById("word-counter");
-
+               
                function startTimer(timer) {
                  var interval;
-
+               
                  function updateTimer() {
                   var elapsedTime = new Date() - startTimeRight;
                var remainingTime = Math.max(0, 40 * 60 * 1000 - elapsedTime); // Calculate remaining time
                var seconds = Math.floor((remainingTime / 1000) % 60);
                var minutes = Math.floor((remainingTime / 1000 / 60) % 60);
                timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
-
+               
                if (remainingTime <= 0) { // Check if time is up
                clearInterval(interval);
                timer.innerHTML = "Time's up!";
@@ -381,30 +381,30 @@
                submitButtonRight.disabled = true;
                }
                }
-
+               
                  function start() {
                    startTimeRight = new Date();
                    interval = setInterval(updateTimer, 1000);
                  }
-
+               
                  return start;
                }
-
+               
                var startTimerRight = startTimer(timerRight);
-
-
+               
+               
                function updateWordCount() { // Define a new function to update word count
                  var wordCount = typingTextRight.value.trim().split(/\s+/).length;
                  wordCounter.innerHTML = wordCount + " words";
                }
-
+               
                typingTextRight.addEventListener("keydown", function(event) {
                  if (!startTimeRight) {
                    startTimerRight();
                  }
                  updateWordCount(); // Update word count on every keydown event
                });
-
+               
                setTimeout(function() {
                  typingTextRight.disabled = true;
                  submitButtonRight.disabled = true;
@@ -447,39 +447,39 @@
                   var typingTextRight5 = document.getElementById("typing-textright5");
                   var submitButtonRight5 = document.getElementsByTagName("button")[1];
                   var wordCounter5 = document.getElementById("wordcounterr");
-
+                  
                   function startTimer5(timer) {
                     var interval;
-
+                  
                     function updateTimer() {
                       var elapsedTime = new Date() - startTimeRight5;
                       var seconds = Math.floor((elapsedTime / 1000) % 60);
                       var minutes = Math.floor((elapsedTime / 1000 / 60) % 60);
                       timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
                     }
-
+                  
                     function start() {
                       startTimeRight5 = new Date();
                       interval = setInterval(updateTimer, 1000);
                     }
-
+                  
                     return start;
                   }
-
+                  
                   var startTimerRight5 = startTimer5(timerRight5);
-
+                  
                   function updateWordCount5() { // Define a new function to update word count
                     var wordCount = typingTextRight5.value.trim().split(/\s+/).length;
                     wordCounter5.innerHTML = wordCount + " words";
                   }
-
+                  
                   typingTextRight5.addEventListener("keydown", function(event) {
                     if (!startTimeRight5) {
                       startTimerRight5();
                     }
                     updateWordCount5(); // Update word count on every keydown event
                   });
-
+                  
                   // No timeout to disable typingTextRight1 and submitButtonRight1
                </script>
                <script>
@@ -506,16 +506,16 @@
                       for (var i = 0; i < tabContent.length; i++) {
                           tabContent[i].classList.remove("active");
                       }
-
+                  
                       // Deactivate all tabs
                       var tabs = document.getElementsByClassName("tab");
                       for (var i = 0; i < tabs.length; i++) {
                           tabs[i].classList.remove("active");
                       }
-
+                  
                       // Show the selected tab content
                       document.getElementById(tabId).classList.add("active");
-
+                  
                       // Activate the selected tab
                       document.querySelector("[onclick*='" + tabId + "']").classList.add("active");
                   }
