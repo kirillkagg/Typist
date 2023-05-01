@@ -199,11 +199,6 @@
          min-height: 400px;
          height: 100%
          }
-         /* center the button */
-         #enter-btn {
-         display: block;
-         margin: auto;
-         }
       </style>
    </head>
    <body>
@@ -211,159 +206,232 @@
          <!-- #222 -->
          <h1>Typist</h1>
       </header>
-      <div id="welcome-page" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #fff;">
-         <div style="max-width: 50%; padding-left: 100px;">
-            <img src="iel.gif" style="max-width: 100%; height: auto;">
+      <div class="tabs">
+         <div class="tab active" onclick="showTab('tab1')">
+            TASK 1
          </div>
-         <div style="text-align: left; max-width: 50%; padding-right: 100px;">
-            <h1 style="font-size: 48px; margin-bottom: 20px;">SOMETHING HERE</h1>
-            <p style="font-size: 24px; line-height: 1.5; color: #444;">The sun was setting behind the mountains, casting a warm orange glow over the valley. A gentle breeze blew through the trees, rustling the leaves and carrying with it the sweet scent of wildflowers. A group of birds flew overhead, their wings flapping in unison as they made their way to their evening roost. In the distance, a faint sound of rushing water could be heard, the river flowing peacefully towards the sea. It was a tranquil evening, a moment of peace and beauty in an ever-changing world.</p>
-            <button id="enter-btn" style="background-color: #333; color: #fff; font-size: 24px; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 50px;">LET'S GO!</button>
+         <div class="tab" onclick="showTab('tab2')">
+            TASK 2
+         </div>
+         <div class="tab" onclick="showTab('tab3')">
+            TRAIN
          </div>
       </div>
-      <div id="main-page" style="display: none;">
-         <div class="tabs">
-            <div class="tab active" onclick="showTab('tab1')">
-               TASK 1
-            </div>
-            <div class="tab" onclick="showTab('tab2')">
-               TASK 2
-            </div>
-            <div class="tab" onclick="showTab('tab3')">
-               TRAIN
+      <div class="tab-content active" id="tab1">
+         <div class="typing-box" style="width: 48%; height: 869px; margin-right: 2%;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+               <canvas height="1550" id="screenshot-canvas" style="padding: 20px; max-width: 100%; max-height: 100%; margin: auto; width:700px; height:800px;" width="1500"></canvas>
+               <button onclick="uploadScreenshot()" style="display: block; margin: 30px auto 0; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; text-align: center; font-size: 18px;">Upload Screenshot</button>
             </div>
          </div>
-         <div class="tab-content active" id="tab1">
-            <div class="typing-box" style="width: 48%; height: 869px; margin-right: 2%;">
-               <div style="display: flex; flex-direction: column; align-items: center;">
-                  <canvas height="1550" id="screenshot-canvas" style="padding: 20px; max-width: 100%; max-height: 100%; margin: auto; width:700px; height:800px;" width="1500"></canvas>
-                  <button onclick="uploadScreenshot()" style="display: block; margin: 30px auto 0; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; text-align: center; font-size: 18px;">Upload Screenshot</button>
+         <div class="typing-box" style="width: 48%; height: 869px">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+               <textarea id="typing-textright" placeholder="Type your text here" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;" autocomplete="off" spellcheck="false"></textarea>
+               <div id="resultright" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
+               <div id="timercontainer" style="width:100%; display: flex; justify-content: space-around; align-items: center; margin-top: 20px; font-size: 24px; margin-right: 10px;">
+                  <div id="timerlabel" style="font-size: 18px; font-size: 24px;"></div>
+                  <div id="buttoncontainer" style="display: flex; justify-content: space-between; margin-top: 20px; margin: 0 auto">
+                     <button id="wordcounter" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;">0 words</button><button id="timerright" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;"></button>
+                  </div>
                </div>
             </div>
+         </div>
+         <script>
+            function loadFile() {
+              const fileInput = document.getElementById("file-input");
+              const file = fileInput.files[0];
+              const reader = new FileReader();
+
+              reader.onload = function(e) {
+                const textArea = document.getElementById("typing-text-left");
+                textArea.value = e.target.result;
+              }
+
+              reader.readAsText(file);
+            }
+
+            function uploadScreenshot() {
+              const canvas = document.getElementById("screenshot-canvas");
+              const ctx = canvas.getContext("2d");
+
+              const input = document.createElement("input");
+              input.type = "file";
+              input.accept = "image/png";
+
+              input.addEventListener("change", function() {
+                const file = this.files[0];
+                const img = new Image();
+                img.onload = function() {
+                  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+                img.src = URL.createObjectURL(file);
+              });
+
+              input.click();
+            }
+         </script>
+         <script>
+            var startTimeRight1;
+            var endTime;
+            var timerRight1 = document.getElementById("timerright");
+            timerRight1.style.fontSize = "20px";
+            var typingTextRight1 = document.getElementById("typing-textright");
+            var submitButtonRight1 = document.getElementsByTagName("button")[1];
+            var wordCounter1 = document.getElementById("wordcounter");
+
+            function startTimer1(timer) {
+              var interval;
+
+              function updateTimer() {
+                var elapsedTime = new Date() - startTimeRight1;
+                var remainingTime = Math.max(0, 20 * 60 * 1000 - elapsedTime);
+                var seconds = Math.floor((remainingTime / 1000) % 60);
+                var minutes = Math.floor((remainingTime / 1000 / 60) % 60);
+                timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+
+                if (remainingTime <= 0) { // Check if time is up
+                  clearInterval(interval);
+                  timer.innerHTML = "Time's up!";
+                  typingTextRight1.disabled = true;
+                  submitButtonRight1.disabled = true;
+                }
+              }
+
+              function start() {
+                startTimeRight1 = new Date();
+                interval = setInterval(updateTimer, 1000);
+              }
+
+              return start;
+            }
+
+            var startTimerRight1 = startTimer1(timerRight1);
+
+
+            function updateWordCount1() { // Define a new function to update word count
+              var wordCount = typingTextRight1.value.trim().split(/\s+/).length;
+              wordCounter1.innerHTML = wordCount + " words";
+            }
+
+            typingTextRight1.addEventListener("keydown", function(event) {
+              if (!startTimeRight1) {
+                startTimerRight1();
+              }
+              updateWordCount1(); // Update word count on every keydown event
+            });
+
+            setTimeout(function() {
+              typingTextRight1.disabled = true;
+              submitButtonRight1.disabled = true;
+            }, 20 * 60 * 1000);
+         </script>
+      </div>
+      <div class="tab-content" id="tab2">
+         <div class="typing-container" style="width: 100%; display: flex; justify-content: space-between;">
             <div class="typing-box" style="width: 48%; height: 869px">
-               <div style="display: flex; flex-direction: column; align-items: center;">
-                  <textarea id="typing-textright" placeholder="Type your text here" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;" autocomplete="off" spellcheck="false"></textarea>
-                  <div id="resultright" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
-                  <div id="timercontainer" style="width:100%; display: flex; justify-content: space-around; align-items: center; margin-top: 20px; font-size: 24px; margin-right: 10px;">
-                     <div id="timerlabel" style="font-size: 18px; font-size: 24px;"></div>
-                     <div id="buttoncontainer" style="display: flex; justify-content: space-between; margin-top: 20px; margin: 0 auto">
-                        <button id="wordcounter" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;">0 words</button><button id="timerright" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;"></button>
-                     </div>
+               <textarea id="typing-text-left" placeholder="Paste your task" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 300px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></textarea>
+               <button onclick="pasteText()" style="display: block; margin: 30px auto 0; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer;">Paste</button>
+               <div id="result-left" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
+            </div>
+            <div class="typing-box" style="width: 48%; height: 869px">
+               <textarea id="typing-text-right" placeholder="Type your text here" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;" autocomplete="off" spellcheck="false"></textarea>
+               <div id="result-right" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
+               <div id="timer-container" style="width:100%; display: flex; justify-content: space-around; align-items: center; margin-top: 20px; font-size: 24px; margin-right: 10px;">
+                  <div id="timer-label" style="font-size: 18px; font-size: 24px;"></div>
+                  <div id="button-container" style="display: flex; justify-content: space-between; margin-top: 20px; margin: 0 auto">
+                     <button id="word-counter" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;">0 words</button> <button id="timer-right" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;"></button>
                   </div>
                </div>
             </div>
             <script>
-               function loadFile() {
-                 const fileInput = document.getElementById("file-input");
-                 const file = fileInput.files[0];
-                 const reader = new FileReader();
-
-                 reader.onload = function(e) {
-                   const textArea = document.getElementById("typing-text-left");
-                   textArea.value = e.target.result;
-                 }
-
-                 reader.readAsText(file);
-               }
-
-               function uploadScreenshot() {
-                 const canvas = document.getElementById("screenshot-canvas");
-                 const ctx = canvas.getContext("2d");
-
-                 const input = document.createElement("input");
-                 input.type = "file";
-                 input.accept = "image/png";
-
-                 input.addEventListener("change", function() {
-                   const file = this.files[0];
-                   const img = new Image();
-                   img.onload = function() {
-                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                   };
-                   img.src = URL.createObjectURL(file);
-                 });
-
-                 input.click();
+               function pasteText() {
+               navigator.clipboard.readText()
+               .then((text) => {
+                 document.getElementById("typing-text-left").value = text;
+               })
+               .catch((err) => {
+                 console.error('Failed to read clipboard contents: ', err);
+               });
                }
             </script>
             <script>
-               var startTimeRight1;
+               var startTimeRight;
                var endTime;
-               var timerRight1 = document.getElementById("timerright");
-               timerRight1.style.fontSize = "20px";
-               var typingTextRight1 = document.getElementById("typing-textright");
-               var submitButtonRight1 = document.getElementsByTagName("button")[1];
-               var wordCounter1 = document.getElementById("wordcounter");
+               var timerRight = document.getElementById("timer-right");
+               timerRight.style.fontSize = "20px";
+               var typingTextRight = document.getElementById("typing-text-right");
+               var submitButtonRight = document.getElementsByTagName("button")[1];
+               var wordCounter = document.getElementById("word-counter");
 
-               function startTimer1(timer) {
+               function startTimer(timer) {
                  var interval;
 
                  function updateTimer() {
-                   var elapsedTime = new Date() - startTimeRight1;
-                   var remainingTime = Math.max(0, 20 * 60 * 1000 - elapsedTime);
-                   var seconds = Math.floor((remainingTime / 1000) % 60);
-                   var minutes = Math.floor((remainingTime / 1000 / 60) % 60);
-                   timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                  var elapsedTime = new Date() - startTimeRight;
+               var remainingTime = Math.max(0, 40 * 60 * 1000 - elapsedTime); // Calculate remaining time
+               var seconds = Math.floor((remainingTime / 1000) % 60);
+               var minutes = Math.floor((remainingTime / 1000 / 60) % 60);
+               timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
 
-                   if (remainingTime <= 0) { // Check if time is up
-                     clearInterval(interval);
-                     timer.innerHTML = "Time's up!";
-                     typingTextRight1.disabled = true;
-                     submitButtonRight1.disabled = true;
-                   }
-                 }
+               if (remainingTime <= 0) { // Check if time is up
+               clearInterval(interval);
+               timer.innerHTML = "Time's up!";
+               typingTextRight.disabled = true;
+               submitButtonRight.disabled = true;
+               }
+               }
 
                  function start() {
-                   startTimeRight1 = new Date();
+                   startTimeRight = new Date();
                    interval = setInterval(updateTimer, 1000);
                  }
 
                  return start;
                }
 
-               var startTimerRight1 = startTimer1(timerRight1);
+               var startTimerRight = startTimer(timerRight);
 
 
-               function updateWordCount1() { // Define a new function to update word count
-                 var wordCount = typingTextRight1.value.trim().split(/\s+/).length;
-                 wordCounter1.innerHTML = wordCount + " words";
+               function updateWordCount() { // Define a new function to update word count
+                 var wordCount = typingTextRight.value.trim().split(/\s+/).length;
+                 wordCounter.innerHTML = wordCount + " words";
                }
 
-               typingTextRight1.addEventListener("keydown", function(event) {
-                 if (!startTimeRight1) {
-                   startTimerRight1();
+               typingTextRight.addEventListener("keydown", function(event) {
+                 if (!startTimeRight) {
+                   startTimerRight();
                  }
-                 updateWordCount1(); // Update word count on every keydown event
+                 updateWordCount(); // Update word count on every keydown event
                });
 
                setTimeout(function() {
-                 typingTextRight1.disabled = true;
-                 submitButtonRight1.disabled = true;
-               }, 20 * 60 * 1000);
+                 typingTextRight.disabled = true;
+                 submitButtonRight.disabled = true;
+               }, 40 * 60 * 1000);
             </script>
          </div>
-         <div class="tab-content" id="tab2">
-            <div class="typing-container" style="width: 100%; display: flex; justify-content: space-between;">
-               <div class="typing-box" style="width: 48%; height: 869px">
-                  <textarea id="typing-text-left" placeholder="Paste your task" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 300px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></textarea>
-                  <button onclick="pasteText()" style="display: block; margin: 30px auto 0; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer;">Paste</button>
-                  <div id="result-left" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
-               </div>
-               <div class="typing-box" style="width: 48%; height: 869px">
-                  <textarea id="typing-text-right" placeholder="Type your text here" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;" autocomplete="off" spellcheck="false"></textarea>
-                  <div id="result-right" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
-                  <div id="timer-container" style="width:100%; display: flex; justify-content: space-around; align-items: center; margin-top: 20px; font-size: 24px; margin-right: 10px;">
-                     <div id="timer-label" style="font-size: 18px; font-size: 24px;"></div>
-                     <div id="button-container" style="display: flex; justify-content: space-between; margin-top: 20px; margin: 0 auto">
-                        <button id="word-counter" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;">0 words</button> <button id="timer-right" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;"></button>
-                     </div>
+      </div>
+      <div class="tab-content" id="tab3">
+         <div class="typing-container" style="width: 100%; display: flex; justify-content: space-between;">
+            <div class="typing-box" style="width: 48%; height: 869px">
+               <textarea id="typing-text-lft5" placeholder="Paste your text" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></textarea>
+               <button onclick="pasteText5()" style="display: block; margin: 30px auto 0; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer;">Paste</button>
+               <div id="result-let" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
+            </div>
+            <div class="typing-box" style="width: 48%; height: 869px">
+               <textarea id="typing-textright5" placeholder="Type your text here" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;" autocomplete="off" spellcheck="false"></textarea>
+               <div id="result-rigt" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
+               <div id="timer-conainer" style="width:100%; display: flex; justify-content: space-around; align-items: center; margin-top: 20px; font-size: 24px; margin-right: 10px;">
+                  <div id="timer-lbel" style="font-size: 18px; font-size: 24px;"></div>
+                  <div id="button-conainer" style="display: flex; justify-content: space-between; margin-top: 20px; margin: 0 auto">
+                     <button id="wordcounterr" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;">0 words</button> <button id="timerright5" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;"></button>
                   </div>
                </div>
                <script>
-                  function pasteText() {
+                  function pasteText5() {
                   navigator.clipboard.readText()
                   .then((text) => {
-                    document.getElementById("typing-text-left").value = text;
+                    document.getElementById("typing-text-lft5").value = text;
                   })
                   .catch((err) => {
                     console.error('Failed to read clipboard contents: ', err);
@@ -371,182 +439,86 @@
                   }
                </script>
                <script>
-                  var startTimeRight;
+                  var startTimeRight5;
                   var endTime;
-                  var timerRight = document.getElementById("timer-right");
-                  timerRight.style.fontSize = "20px";
-                  var typingTextRight = document.getElementById("typing-text-right");
-                  var submitButtonRight = document.getElementsByTagName("button")[1];
-                  var wordCounter = document.getElementById("word-counter");
+                  var timerRight5 = document.getElementById("timerright5");
+                  timerRight5.style.fontSize = "20px";
+                  var typingTextRight5 = document.getElementById("typing-textright5");
+                  var submitButtonRight5 = document.getElementsByTagName("button")[1];
+                  var wordCounter5 = document.getElementById("wordcounterr");
 
-                  function startTimer(timer) {
+                  function startTimer5(timer) {
                     var interval;
 
                     function updateTimer() {
-                     var elapsedTime = new Date() - startTimeRight;
-                  var remainingTime = Math.max(0, 40 * 60 * 1000 - elapsedTime); // Calculate remaining time
-                  var seconds = Math.floor((remainingTime / 1000) % 60);
-                  var minutes = Math.floor((remainingTime / 1000 / 60) % 60);
-                  timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
-
-                  if (remainingTime <= 0) { // Check if time is up
-                  clearInterval(interval);
-                  timer.innerHTML = "Time's up!";
-                  typingTextRight.disabled = true;
-                  submitButtonRight.disabled = true;
-                  }
-                  }
+                      var elapsedTime = new Date() - startTimeRight5;
+                      var seconds = Math.floor((elapsedTime / 1000) % 60);
+                      var minutes = Math.floor((elapsedTime / 1000 / 60) % 60);
+                      timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                    }
 
                     function start() {
-                      startTimeRight = new Date();
+                      startTimeRight5 = new Date();
                       interval = setInterval(updateTimer, 1000);
                     }
 
                     return start;
                   }
 
-                  var startTimerRight = startTimer(timerRight);
+                  var startTimerRight5 = startTimer5(timerRight5);
 
-
-                  function updateWordCount() { // Define a new function to update word count
-                    var wordCount = typingTextRight.value.trim().split(/\s+/).length;
-                    wordCounter.innerHTML = wordCount + " words";
+                  function updateWordCount5() { // Define a new function to update word count
+                    var wordCount = typingTextRight5.value.trim().split(/\s+/).length;
+                    wordCounter5.innerHTML = wordCount + " words";
                   }
 
-                  typingTextRight.addEventListener("keydown", function(event) {
-                    if (!startTimeRight) {
-                      startTimerRight();
+                  typingTextRight5.addEventListener("keydown", function(event) {
+                    if (!startTimeRight5) {
+                      startTimerRight5();
                     }
-                    updateWordCount(); // Update word count on every keydown event
+                    updateWordCount5(); // Update word count on every keydown event
                   });
 
-                  setTimeout(function() {
-                    typingTextRight.disabled = true;
-                    submitButtonRight.disabled = true;
-                  }, 40 * 60 * 1000);
+                  // No timeout to disable typingTextRight1 and submitButtonRight1
                </script>
-            </div>
-         </div>
-         <div class="tab-content" id="tab3">
-            <div class="typing-container" style="width: 100%; display: flex; justify-content: space-between;">
-               <div class="typing-box" style="width: 48%; height: 869px">
-                  <textarea id="typing-text-lft5" placeholder="Paste your text" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></textarea>
-                  <button onclick="pasteText5()" style="display: block; margin: 30px auto 0; padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer;">Paste</button>
-                  <div id="result-let" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
-               </div>
-               <div class="typing-box" style="width: 48%; height: 869px">
-                  <textarea id="typing-textright5" placeholder="Type your text here" style="display: block; margin: 0 auto; padding: 10px; width: 100%; height: 800px; font-size: 18px; line-height: 1.5; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;" autocomplete="off" spellcheck="false"></textarea>
-                  <div id="result-rigt" style="display: none; margin: 30px auto 0; padding: 20px; width: 100%; font-size: 24px; line-height: 1.5; text-align: center; background-color: #fff; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box;"></div>
-                  <div id="timer-conainer" style="width:100%; display: flex; justify-content: space-around; align-items: center; margin-top: 20px; font-size: 24px; margin-right: 10px;">
-                     <div id="timer-lbel" style="font-size: 18px; font-size: 24px;"></div>
-                     <div id="button-conainer" style="display: flex; justify-content: space-between; margin-top: 20px; margin: 0 auto">
-                        <button id="wordcounterr" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;">0 words</button> <button id="timerright5" style="padding: 10px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #333; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: flex; justify-content: center; align-items: center; margin-right: 10px;"></button>
-                     </div>
-                  </div>
-                  <script>
-                     function pasteText5() {
-                     navigator.clipboard.readText()
-                     .then((text) => {
-                       document.getElementById("typing-text-lft5").value = text;
-                     })
-                     .catch((err) => {
-                       console.error('Failed to read clipboard contents: ', err);
-                     });
-                     }
-                  </script>
-                  <script>
-                     var startTimeRight5;
-                     var endTime;
-                     var timerRight5 = document.getElementById("timerright5");
-                     timerRight5.style.fontSize = "20px";
-                     var typingTextRight5 = document.getElementById("typing-textright5");
-                     var submitButtonRight5 = document.getElementsByTagName("button")[1];
-                     var wordCounter5 = document.getElementById("wordcounterr");
+               <script>
+                  function checkAccuracy() {
+                  var inputText = document.getElementById("typing-input").value.trim();
+                  var originalText = document.getElementById("typing-text").value.trim();
+                  var originalWords = originalText.split(" ");
+                  var inputWords = inputText.split(" ");
+                  var errorCount = 0;
+                  for (var i = 0; i < originalWords.length; i++) {
+                    if (inputWords[i] != originalWords[i]) {
+                      errorCount++;
+                    }
+                  }
+                  var accuracy = ((originalWords.length - errorCount) / originalWords.length) * 100;
+                  var resultDiv = document.getElementById("result");
+                  resultDiv.innerHTML = "<p>Accuracy: " + accuracy.toFixed(2) + "%<\/p><p>Errors: " + errorCount + "<\/p>";
+                  }
+               </script>
+               <script>
+                  function showTab(tabId) {
+                      // Hide all tab content
+                      var tabContent = document.getElementsByClassName("tab-content");
+                      for (var i = 0; i < tabContent.length; i++) {
+                          tabContent[i].classList.remove("active");
+                      }
 
-                     function startTimer5(timer) {
-                       var interval;
+                      // Deactivate all tabs
+                      var tabs = document.getElementsByClassName("tab");
+                      for (var i = 0; i < tabs.length; i++) {
+                          tabs[i].classList.remove("active");
+                      }
 
-                       function updateTimer() {
-                         var elapsedTime = new Date() - startTimeRight5;
-                         var seconds = Math.floor((elapsedTime / 1000) % 60);
-                         var minutes = Math.floor((elapsedTime / 1000 / 60) % 60);
-                         timer.innerHTML = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
-                       }
+                      // Show the selected tab content
+                      document.getElementById(tabId).classList.add("active");
 
-                       function start() {
-                         startTimeRight5 = new Date();
-                         interval = setInterval(updateTimer, 1000);
-                       }
-
-                       return start;
-                     }
-
-                     var startTimerRight5 = startTimer5(timerRight5);
-
-                     function updateWordCount5() { // Define a new function to update word count
-                       var wordCount = typingTextRight5.value.trim().split(/\s+/).length;
-                       wordCounter5.innerHTML = wordCount + " words";
-                     }
-
-                     typingTextRight5.addEventListener("keydown", function(event) {
-                       if (!startTimeRight5) {
-                         startTimerRight5();
-                       }
-                       updateWordCount5(); // Update word count on every keydown event
-                     });
-
-                     // No timeout to disable typingTextRight1 and submitButtonRight1
-                  </script>
-                  <script>
-                     function checkAccuracy() {
-                     var inputText = document.getElementById("typing-input").value.trim();
-                     var originalText = document.getElementById("typing-text").value.trim();
-                     var originalWords = originalText.split(" ");
-                     var inputWords = inputText.split(" ");
-                     var errorCount = 0;
-                     for (var i = 0; i < originalWords.length; i++) {
-                       if (inputWords[i] != originalWords[i]) {
-                         errorCount++;
-                       }
-                     }
-                     var accuracy = ((originalWords.length - errorCount) / originalWords.length) * 100;
-                     var resultDiv = document.getElementById("result");
-                     resultDiv.innerHTML = "<p>Accuracy: " + accuracy.toFixed(2) + "%<\/p><p>Errors: " + errorCount + "<\/p>";
-                     }
-                  </script>
-                  <script>
-                     function showTab(tabId) {
-                         // Hide all tab content
-                         var tabContent = document.getElementsByClassName("tab-content");
-                         for (var i = 0; i < tabContent.length; i++) {
-                             tabContent[i].classList.remove("active");
-                         }
-
-                         // Deactivate all tabs
-                         var tabs = document.getElementsByClassName("tab");
-                         for (var i = 0; i < tabs.length; i++) {
-                             tabs[i].classList.remove("active");
-                         }
-
-                         // Show the selected tab content
-                         document.getElementById(tabId).classList.add("active");
-
-                         // Activate the selected tab
-                         document.querySelector("[onclick*='" + tabId + "']").classList.add("active");
-                     }
-                  </script>
-                  <script>
-                     const welcomePage = document.getElementById("welcome-page");
-                     const mainPage = document.getElementById("main-page");
-                     const enterBtn = document.getElementById("enter-btn");
-
-                     enterBtn.addEventListener("click", () => {
-                       welcomePage.style.display = "none";
-                       mainPage.style.display = "block";
-                       mainPage.innerHTML += "<p></p>";
-                     });
-                  </script>
-               </div>
+                      // Activate the selected tab
+                      document.querySelector("[onclick*='" + tabId + "']").classList.add("active");
+                  }
+               </script>
             </div>
          </div>
       </div>
