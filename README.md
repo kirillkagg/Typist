@@ -1,4 +1,4 @@
-Typist
+#Typist
 
 Typist is a typing speed test web application that allows users to test their typing speed and accuracy. The application is built using HTML, CSS, and JavaScript and is hosted on GitHub Pages.
 
