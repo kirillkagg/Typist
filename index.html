@@ -326,8 +326,6 @@
                    if (remainingTime <= 0) { // Check if time is up
                      clearInterval(interval);
                      timer.innerHTML = "Time's up!";
-                     typingTextRight1.disabled = true;
-                     submitButtonRight1.disabled = true;
                    }
                  }
 
@@ -357,16 +355,6 @@
                setTimeout(function() {
                  typingTextRight1.disabled = true;
                  submitButtonRight1.disabled = true;
-               }, 20 * 60 * 1000);
-
-               // Disable typing after 20 minutes
-               setTimeout(function() {
-                 typingTextRight1.removeEventListener("keydown", function(event) {
-                   if (!startTimeRight1) {
-                     startTimerRight1();
-                   }
-                   updateWordCount1(); // Update word count on every keydown event
-                 });
                }, 20 * 60 * 1000);
             </script>
          </div>
@@ -421,8 +409,6 @@
                    if (remainingTime <= 0) { // Check if time is up
                      clearInterval(interval);
                      timer.innerHTML = "Time's up!";
-                     typingTextRight.disabled = true;
-                     submitButtonRight.disabled = true;
                    }
                  }
 
